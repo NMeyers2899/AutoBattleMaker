@@ -20,6 +20,11 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	/// <summary>
+	/// Updates the walk speed of the unit given a certain speed.
+	/// </summary>
+	/// <param name="speed"> The speed that the unit's walk speed will update to. </param>
+	virtual void UpdateWalkSpeed(float speed);
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

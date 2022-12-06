@@ -2,6 +2,7 @@
 
 
 #include "UnitCharacter.h"
+#include <GameFramework/CharacterMovementComponent.h>
 
 // Sets default values
 AUnitCharacter::AUnitCharacter()
@@ -16,6 +17,11 @@ void AUnitCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void AUnitCharacter::UpdateWalkSpeed(float speed)
+{
+	GetCharacterMovement()->MaxWalkSpeed = speed;
 }
 
 // Called every frame
