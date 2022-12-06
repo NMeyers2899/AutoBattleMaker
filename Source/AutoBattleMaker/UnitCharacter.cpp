@@ -2,7 +2,6 @@
 
 
 #include "UnitCharacter.h"
-#include "LootTableAsset.h"
 
 // Sets default values
 AUnitCharacter::AUnitCharacter()
@@ -16,12 +15,6 @@ AUnitCharacter::AUnitCharacter()
 void AUnitCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if (LootTable)
-	{
-		for (int i = 0; i < LootTable->Loot.Num(); i++)
-		GEngine->AddOnScreenDebugMessage(-1, 3.0, LootTable->Loot[0].Color, LootTable->Loot[0].Name);
-	}
 	
 }
 
