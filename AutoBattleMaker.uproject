@@ -1,0 +1,16 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{0291F2B7-425B-2052-A16F-DCB96817C794}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "AutoBattleMaker",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
+		}
+	]
+}
