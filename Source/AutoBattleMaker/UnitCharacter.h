@@ -35,9 +35,12 @@ public:
 private:
 	// Camera
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-		class UCameraComponent* Camera;
+	class UCameraComponent* Camera;
 
 	// Spring Arm
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-		class USpringArmComponent* CameraArm;
+	class USpringArmComponent* CameraArm;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	AUnitCharacter* Target;
 };

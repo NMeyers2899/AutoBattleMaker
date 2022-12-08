@@ -7,7 +7,7 @@
 
 void AUnitAIController::OnPossess(APawn* InPawn)
 {
-	AController::OnPossess(InPawn);
+	AAIController::OnPossess(InPawn);
 
 	GEngine->AddOnScreenDebugMessage(-1, 10.0f, DebugUtilColor->Black, "Possesed Successfully");
 

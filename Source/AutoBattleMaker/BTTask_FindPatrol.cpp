@@ -2,6 +2,7 @@
 
 
 #include "BTTask_FindPatrol.h"
+#include "UnitCharacter.h"
 #include <AIController.h>
 #include <BehaviorTree/BlackboardComponent.h>
 #include <NavigationPath.h>
@@ -20,7 +21,7 @@ EBTNodeResult::Type UBTTask_FindPatrol::ExecuteTask(UBehaviorTreeComponent& Owne
 	FNavLocation PatrolLocation;
 
 	// Checks to see if a point can be found in the unit's radius. If it is, set the patrol location on the blackboard to that found value.
-	if (navSystem->GetRandomReachablePointInRadius(controller->GetOwner()->GetActorLocation(), Radius, PatrolLocation))
+	if (navSystem->GetRandomReachablePointInRadius(controller->GetPawn()->GetActorLocation(), Radius, PatrolLocation))
 	{
 		controller->GetBlackboardComponent()->SetValueAsVector("PatrolLocation", PatrolLocation.Location);
 	}
