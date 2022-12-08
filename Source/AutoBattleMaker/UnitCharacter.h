@@ -6,6 +6,18 @@
 #include "GameFramework/Character.h"
 #include "UnitCharacter.generated.h"
 
+USTRUCT()
+struct FUnitStats
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditAnywhere)
+	float MovementSpeed;
+
+	UPROPERTY(EditAnywhere)
+	float ActionRange;
+};
+
 UCLASS()
 class AUTOBATTLEMAKER_API AUnitCharacter : public ACharacter
 {
@@ -32,6 +44,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	FUnitStats GetUnitStats() { return UnitStats; }
+
 private:
 	// Camera
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -41,6 +55,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraArm;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere)
 	AUnitCharacter* Target;
+
+	UPROPERTY(EditAnywhere)
+	FUnitStats UnitStats;
 };

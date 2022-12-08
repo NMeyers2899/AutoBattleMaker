@@ -39,6 +39,8 @@ void AUnitCharacter::UpdateWalkSpeed(float speed)
 void AUnitCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	UpdateWalkSpeed(UnitStats.MovementSpeed);
 }
 
 // Called to bind functionality to input
