@@ -5,6 +5,9 @@
 #include <GameFramework/CharacterMovementComponent.h>
 #include <Camera/CameraComponent.h>
 #include <GameFramework/SpringArmComponent.h>
+#include <Components/SphereComponent.h>
+#include <Perception/AIPerceptionComponent.h>
+#include <Perception/AISenseConfig_Sight.h>
 
 // Sets default values
 AUnitCharacter::AUnitCharacter()
@@ -21,18 +24,41 @@ AUnitCharacter::AUnitCharacter()
 	// Create the camera.
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Player Camera"));
 	Camera->SetupAttachment(CameraArm);
+
+	// Creates a radius that will be used to detect incoming units.
+	Radius = CreateDefaultSubobject<USphereComponent>(TEXT("Unit Sight Range"));
+	Radius->SetupAttachment(RootComponent);
+
+	// Create objects for the perception component and sight configuration.
+	PerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception Component"));
+	Sight = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight"));
+
+	// Sets up the range at which the unit will be able to percieve other units entering their sight range.
+	Sight->SightRadius = UnitStats.SightRange;
+	Sight->LoseSightRadius = UnitStats.SightRange + 500;
+	Sight->PeripheralVisionAngleDegrees = 90.0f;
+
+	// Sets the perception component's dominant sense to the sight configuration.
+	PerceptionComponent->ConfigureSense(*Sight);
+	PerceptionComponent->SetDominantSense(Sight->GetSenseImplementation());
 }
 
 // Called when the game starts or when spawned
 void AUnitCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	Radius->SetSphereRadius(UnitStats.SightRange);
 }
 
 void AUnitCharacter::UpdateWalkSpeed(float speed)
 {
 	GetCharacterMovement()->MaxWalkSpeed = speed;
+}
+
+void AUnitCharacter::UpdateTarget()
+{
+	
 }
 
 // Called every frame

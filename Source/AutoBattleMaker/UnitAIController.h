@@ -21,4 +21,5 @@ private:
 	UPROPERTY(EditAnywhere)
 	class UBehaviorTree* BehaviorTree;
 	
+	class AUnitCharacter* Unit;
 };
