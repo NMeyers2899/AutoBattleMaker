@@ -73,17 +73,6 @@ public:
 	FUnitStats GetUnitStats() { return UnitStats; }
 
 private:
-	// Camera
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* Camera;
-
-	// Spring Arm
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* CameraArm;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Radius, meta = (AllowPrivateAccess = "true"))
-	class USphereComponent* Radius;
-
 	UPROPERTY(EditAnywhere)
 	AUnitCharacter* Target;
 
@@ -93,6 +82,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	TArray<FTarget> PotentialTargets;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Perception, meta = (AllowPrivateAccess = "true"))
 	class UAIPerceptionComponent* PerceptionComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Perception, meta = (AllowPrivateAccess = "true"))
 	class UAISenseConfig_Sight* Sight;
 };

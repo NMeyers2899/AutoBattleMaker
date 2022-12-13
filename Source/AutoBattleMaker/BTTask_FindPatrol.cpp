@@ -12,6 +12,7 @@ EBTNodeResult::Type UBTTask_FindPatrol::ExecuteTask(UBehaviorTreeComponent& Owne
 {
 	// Gets the unit's AI controller.
 	AAIController* controller = OwnerComp.GetAIOwner();
+	AUnitCharacter* unit = dynamic_cast<AUnitCharacter*>(controller->GetPawn());
 
 	// If there is no unit, fail the process.
 	if (!controller)
@@ -28,7 +29,7 @@ EBTNodeResult::Type UBTTask_FindPatrol::ExecuteTask(UBehaviorTreeComponent& Owne
 	// If it is not, make the patrol location the unit's current location.
 	else
 	{
-		controller->GetBlackboardComponent()->SetValueAsVector("PatrolLocation", controller->GetOwner()->GetActorLocation());
+		controller->GetBlackboardComponent()->SetValueAsVector("PatrolLocation", controller->GetPawn()->GetActorLocation());
 	}
 
 	return EBTNodeResult::Succeeded;

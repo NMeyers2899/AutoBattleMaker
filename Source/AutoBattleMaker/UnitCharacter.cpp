@@ -15,20 +15,6 @@ AUnitCharacter::AUnitCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	// Create the camera arm.
-	CameraArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Camera Arm"));
-	CameraArm->SetupAttachment(RootComponent);
-	CameraArm->TargetArmLength = 300.0f;
-	CameraArm->SetRelativeLocation(FVector(0.0f, 0.0f, 100.0f));
-
-	// Create the camera.
-	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Player Camera"));
-	Camera->SetupAttachment(CameraArm);
-
-	// Creates a radius that will be used to detect incoming units.
-	Radius = CreateDefaultSubobject<USphereComponent>(TEXT("Unit Sight Range"));
-	Radius->SetupAttachment(RootComponent);
-
 	// Create objects for the perception component and sight configuration.
 	PerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception Component"));
 	Sight = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight"));
@@ -47,8 +33,6 @@ AUnitCharacter::AUnitCharacter()
 void AUnitCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	Radius->SetSphereRadius(UnitStats.SightRange);
 }
 
 void AUnitCharacter::UpdateWalkSpeed(float speed)
