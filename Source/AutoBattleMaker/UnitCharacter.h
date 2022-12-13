@@ -58,6 +58,7 @@ public:
 	/// Updates the walk speed of the unit given a certain speed.
 	/// </summary>
 	/// <param name="speed"> The speed that the unit's walk speed will update to. </param>
+	UFUNCTION(BlueprintCallable)
 	virtual void UpdateWalkSpeed(float speed);
 
 	/// <summary>
@@ -76,6 +77,7 @@ public:
 	/// </summary>
 	FUnitStats GetUnitStats() { return UnitStats; }
 
+	UFUNCTION()
 	virtual void OnPerception(AActor* Actor, FAIStimulus Stimulus);
 
 private:
@@ -104,12 +106,12 @@ private:
 	/// <summary>
 	/// The component that the unit will use to scan their environment.
 	/// </summary>
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Perception, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Perception, meta = (AllowPrivateAccess = "true"))
 	class UAIPerceptionComponent* PerceptionComponent;
 
 	/// <summary>
 	/// The sight sense that the perception component will use to see incoming targets.
 	/// </summary>
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Perception, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Perception, meta = (AllowPrivateAccess = "true"))
 	class UAISenseConfig_Sight* Sight;
 };

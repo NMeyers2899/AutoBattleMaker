@@ -19,11 +19,6 @@ AUnitCharacter::AUnitCharacter()
 	PerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception Component"));
 	Sight = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight"));
 
-	// Sets up the range at which the unit will be able to percieve other units entering their sight range.
-	Sight->SightRadius = UnitStats.SightRange;
-	Sight->LoseSightRadius = UnitStats.SightRange + 500;
-	Sight->PeripheralVisionAngleDegrees = 90.0f;
-
 	// Sets the perception component's dominant sense to the sight configuration.
 	PerceptionComponent->ConfigureSense(*Sight);
 	PerceptionComponent->SetDominantSense(Sight->GetSenseImplementation());
@@ -54,16 +49,21 @@ void AUnitCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	UpdateWalkSpeed(UnitStats.MovementSpeed);
+
+	// Sets up the range at which the unit will be able to percieve other units entering their sight range.
+	Sight->SightRadius = UnitStats.SightRange;
+	Sight->LoseSightRadius = UnitStats.SightRange + 500;
+	Sight->PeripheralVisionAngleDegrees = 90.0f;
 }
 
 // Called to bind functionality to input
 void AUnitCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 
 void AUnitCharacter::OnPerception(AActor* Actor, FAIStimulus Stimulus)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, Sight->GetDebugColor(), "Something Was Spotted");
 }
 
