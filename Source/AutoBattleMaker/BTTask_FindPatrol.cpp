@@ -12,7 +12,6 @@ EBTNodeResult::Type UBTTask_FindPatrol::ExecuteTask(UBehaviorTreeComponent& Owne
 {
 	// Gets the unit's AI controller.
 	AAIController* controller = OwnerComp.GetAIOwner();
-	AUnitCharacter* unit = dynamic_cast<AUnitCharacter*>(controller->GetPawn());
 
 	// If there is no unit, fail the process.
 	if (!controller)

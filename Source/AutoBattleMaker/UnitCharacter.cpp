@@ -12,7 +12,7 @@
 // Sets default values
 AUnitCharacter::AUnitCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 	// Set this character to call Tick() every frame. You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Create objects for the perception component and sight configuration.
@@ -27,6 +27,9 @@ AUnitCharacter::AUnitCharacter()
 	// Sets the perception component's dominant sense to the sight configuration.
 	PerceptionComponent->ConfigureSense(*Sight);
 	PerceptionComponent->SetDominantSense(Sight->GetSenseImplementation());
+
+	// Adds the unit's OnPerception function to the Perception Component's OnTargetPerceptionUpdated delegate.
+	PerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AUnitCharacter::OnPerception);
 }
 
 // Called when the game starts or when spawned
@@ -58,5 +61,9 @@ void AUnitCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void AUnitCharacter::OnPerception(AActor* Actor, FAIStimulus Stimulus)
+{
 }
 
