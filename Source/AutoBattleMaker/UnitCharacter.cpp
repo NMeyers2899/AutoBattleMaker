@@ -43,19 +43,6 @@ void AUnitCharacter::UpdateWalkSpeed(float speed)
 
 AUnitCharacter* AUnitCharacter::UpdateTarget()
 {
-	// Create a new array of potential targets and check to see the distance between each target and this unit.
-	TArray<FTarget> newTargetList;
-	for (int i = 0; i < PotentialTargets.Num(); i++)
-	{
-		// If that target is close enough, add it to the new list.
-		if (Sight->LoseSightRadius > FVector::Dist(GetActorLocation(), PotentialTargets[i].Unit->GetActorLocation()))
-			newTargetList.Add(PotentialTargets[i]);
-		else if (Target == PotentialTargets[i].Unit)
-			Target = NULL;
-	}
-
-	PotentialTargets = newTargetList;
-
 	FTarget currentTarget;
 	currentTarget.Priority = 0;
 
