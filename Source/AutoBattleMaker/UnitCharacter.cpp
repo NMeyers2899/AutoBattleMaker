@@ -41,7 +41,7 @@ void AUnitCharacter::UpdateWalkSpeed(float speed)
 	GetCharacterMovement()->MaxWalkSpeed = speed;
 }
 
-AUnitCharacter* AUnitCharacter::UpdateTarget()
+void AUnitCharacter::UpdateTarget()
 {
 	FTarget currentTarget;
 	currentTarget.Priority = 0;
@@ -54,7 +54,7 @@ AUnitCharacter* AUnitCharacter::UpdateTarget()
 			currentTarget = PotentialTargets[i];
 	}
 
-	return currentTarget.Unit;
+	Target = currentTarget.Unit;
 }
 
 // Called every frame
@@ -67,9 +67,9 @@ void AUnitCharacter::Tick(float DeltaTime)
 	// Sets up the range at which the unit will be able to percieve other units entering their sight range.
 	Sight->SightRadius = UnitStats.SightRange;
 	Sight->LoseSightRadius = UnitStats.SightRange + 500;
-	Sight->PeripheralVisionAngleDegrees = 70.0f;
+	Sight->PeripheralVisionAngleDegrees = 90.0f;
 
-	Target = UpdateTarget();
+	UpdateTarget();
 }
 
 // Called to bind functionality to input

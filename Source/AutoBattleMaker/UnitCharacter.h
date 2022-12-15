@@ -64,7 +64,7 @@ public:
 	/// <summary>
 	/// Updates all target's priority and updates the target at the end.
 	/// </summary>
-	virtual AUnitCharacter* UpdateTarget();
+	virtual void UpdateTarget();
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -77,6 +77,8 @@ public:
 	/// </summary>
 	FUnitStats GetUnitStats() { return UnitStats; }
 
+	AUnitCharacter* GetTarget() { return Target; }
+
 	UFUNCTION()
 	virtual void OnPerception(AActor* Actor, FAIStimulus Stimulus);
 
@@ -86,7 +88,7 @@ private:
 	/// <summary>
 	/// The target that the unit will attempt to act upon.
 	/// </summary>
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	AUnitCharacter* Target;
 
 	/// <summary>
