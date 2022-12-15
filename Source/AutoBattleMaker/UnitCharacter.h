@@ -64,7 +64,7 @@ public:
 	/// <summary>
 	/// Updates all target's priority and updates the target at the end.
 	/// </summary>
-	virtual void UpdateTarget();
+	virtual AUnitCharacter* UpdateTarget();
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -86,7 +86,7 @@ private:
 	/// <summary>
 	/// The target that the unit will attempt to act upon.
 	/// </summary>
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 	AUnitCharacter* Target;
 
 	/// <summary>
