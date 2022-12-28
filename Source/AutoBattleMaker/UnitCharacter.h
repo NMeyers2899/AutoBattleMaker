@@ -79,6 +79,8 @@ public:
 
 	AUnitCharacter* GetTarget() { return Target; }
 
+	void Act();
+
 	UFUNCTION()
 	virtual void OnPerception(AActor* Actor, FAIStimulus Stimulus);
 

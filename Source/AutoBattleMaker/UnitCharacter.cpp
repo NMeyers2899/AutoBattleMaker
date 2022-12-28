@@ -78,6 +78,11 @@ void AUnitCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+void AUnitCharacter::Act()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, Sight->GetDebugColor(), "Action Taken");
+}
+
 void AUnitCharacter::OnPerception(AActor* Actor, FAIStimulus Stimulus)
 {
 	// Creates a new target, and casts the actor that was spotted to a unit character.

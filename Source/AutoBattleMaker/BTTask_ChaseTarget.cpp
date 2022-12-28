@@ -16,7 +16,7 @@ EBTNodeResult::Type UBTTask_ChaseTarget::ExecuteTask(UBehaviorTreeComponent& Own
 		OwnerComp.GetAIOwner()->GetBlackboardComponent()->SetValueAsVector("TargetLocation", unit->GetTarget()->GetActorLocation());
 
 		return EBTNodeResult::Succeeded;
-	} 
+	}
 
 	return EBTNodeResult::Failed;
 }
