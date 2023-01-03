@@ -90,6 +90,7 @@ private:
 	/// <summary>
 	/// The target that the unit will attempt to act upon.
 	/// </summary>
+	UPROPERTY(VisibleAnywhere)
 	AUnitCharacter* Target;
 
 	/// <summary>

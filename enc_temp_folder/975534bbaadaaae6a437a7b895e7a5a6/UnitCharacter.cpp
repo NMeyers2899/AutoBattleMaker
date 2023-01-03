@@ -123,10 +123,7 @@ void AUnitCharacter::OnPerception(AActor* Actor, FAIStimulus Stimulus)
 		{
 			// If that target is not close enough, add it to the new list.
 			if (PotentialTargets[i].Unit != NULL && Sight->LoseSightRadius > FVector::Dist(GetActorLocation(), PotentialTargets[i].Unit->GetActorLocation()))
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 2.0f, Sight->GetDebugColor(), "Target Removed");
 				newTargetList.Add(PotentialTargets[i]);
-			}
 		}
 
 		PotentialTargets = newTargetList;

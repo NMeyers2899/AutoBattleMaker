@@ -17,6 +17,6 @@ EBTNodeResult::Type UBTTask_Act::ExecuteTask(UBehaviorTreeComponent& OwnerComp, 
 		unit->Act();
 		return EBTNodeResult::Succeeded;
 	}
-
+	       
 	return EBTNodeResult::Failed;
 }
