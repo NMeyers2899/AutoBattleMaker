@@ -22,6 +22,7 @@ AUnitCharacter::AUnitCharacter()
 	// Sets the perception component's dominant sense to the sight configuration.
 	PerceptionComponent->ConfigureSense(*Sight);
 	PerceptionComponent->SetDominantSense(Sight->GetSenseImplementation());
+	Sight->PeripheralVisionAngleDegrees = 90.0f;
 
 	// Adds the unit's OnPerception function to the Perception Component's OnTargetPerceptionUpdated delegate.
 	PerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AUnitCharacter::OnPerception);
@@ -43,9 +44,24 @@ void AUnitCharacter::UpdateWalkSpeed(float speed)
 
 void AUnitCharacter::UpdateTarget()
 {
+	//if (Target)
+	//{
+	//	// If a unit is too far from this one, remove it from the list.
+	//	TArray<FTarget> newTargetList;
+	//	for (int i = 0; i < PotentialTargets.Num(); i++)
+	//	{
+	//		// If that target is not close enough, add it to the new list.
+	//		if (Sight->LoseSightRadius > FVector::Dist(GetActorLocation(), PotentialTargets[i].Unit->GetActorLocation()))
+	//			newTargetList.Add(PotentialTargets[i]);
+	//	}
+
+	//	PotentialTargets = newTargetList;
+	//}
+
 	FTarget currentTarget;
 	currentTarget.Priority = 0;
 
+	// Increase priority on each potential target and set the target as the one with the highest priority.
 	for (int i = 0; i < PotentialTargets.Num(); i++)
 	{
 		PotentialTargets[i].Priority += 0.001;
@@ -67,7 +83,6 @@ void AUnitCharacter::Tick(float DeltaTime)
 	// Sets up the range at which the unit will be able to percieve other units entering their sight range.
 	Sight->SightRadius = UnitStats.SightRange;
 	Sight->LoseSightRadius = UnitStats.SightRange + 500;
-	Sight->PeripheralVisionAngleDegrees = 90.0f;
 
 	UpdateTarget();
 }

@@ -21,12 +21,6 @@ public:
 
 private:
 	/// <summary>
-	/// How fast the unit will move.
-	/// </summary>
-	UPROPERTY(EditAnywhere)
-	float Speed = 300.0f;
-
-	/// <summary>
 	/// The radius in which the unit will seek out its next location.
 	/// </summary>
 	UPROPERTY(EditAnywhere)
