@@ -13,9 +13,10 @@ EBTNodeResult::Type UBTTask_FindPatrol::ExecuteTask(UBehaviorTreeComponent& Owne
 	// Gets the unit's AI controller.
 	AAIController* controller = OwnerComp.GetAIOwner();
 
-	// If there is no unit, fail the process.
-	if (!controller)
-		return EBTNodeResult::Failed;
+	AUnitCharacter* unit = dynamic_cast<AUnitCharacter*>(controller->GetPawn());
+
+	if (unit->GetTarget())
+		return EBTNodeResult::Succeeded;
 
 	UNavigationSystemV1* navSystem = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld());
 	FNavLocation PatrolLocation;
@@ -28,7 +29,7 @@ EBTNodeResult::Type UBTTask_FindPatrol::ExecuteTask(UBehaviorTreeComponent& Owne
 	// If it is not, make the patrol location the unit's current location.
 	else
 	{
-		controller->GetBlackboardComponent()->SetValueAsVector("PatrolLocation", controller->GetPawn()->GetActorLocation());
+		return EBTNodeResult::Failed;
 	}
 
 	return EBTNodeResult::Succeeded;

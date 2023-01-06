@@ -35,6 +35,8 @@ AUnitCharacter::AUnitCharacter()
 void AUnitCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UnitStats.CurrentUnitHealth = UnitStats.MaxUnitHealth;
 }
 
 void AUnitCharacter::UpdateWalkSpeed(float speed)
@@ -52,6 +54,20 @@ void AUnitCharacter::TakeDamage(float damage)
 
 void AUnitCharacter::UpdateTarget()
 {
+	if (Target)
+	{
+		// If a unit is too far from this one or dead, remove it from the list.
+		TArray<FTarget> newTargetList;
+		for (int i = 0; i < PotentialTargets.Num(); i++)
+		{
+			// If that target is not close enough, add it to the new list.
+			if (PotentialTargets[i].Unit->IsActorBeingDestroyed() && Sight->LoseSightRadius > FVector::Dist(GetActorLocation(), PotentialTargets[i].Unit->GetActorLocation()))
+				newTargetList.Add(PotentialTargets[i]);
+		}
+
+		PotentialTargets = newTargetList;
+	}
+
 	FTarget currentTarget;
 	currentTarget.Priority = 0;
 
@@ -62,6 +78,12 @@ void AUnitCharacter::UpdateTarget()
 
 		if (PotentialTargets[i].Priority > currentTarget.Priority)
 			currentTarget = PotentialTargets[i];
+	}
+
+	if (currentTarget.Unit == NULL)
+	{
+		Target = nullptr;
+		return;
 	}
 
 	Target = currentTarget.Unit;
@@ -123,19 +145,5 @@ void AUnitCharacter::OnPerception(AActor* Actor, FAIStimulus Stimulus)
 	newTarget.Priority = 0;
 	PotentialTargets.Add(newTarget);
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, Sight->GetDebugColor(), "Target Added");
-
-	if (Target)
-	{
-		// If a unit is too far from this one, remove it from the list.
-		TArray<FTarget> newTargetList;
-		for (int i = 0; i < PotentialTargets.Num(); i++)
-		{
-			// If that target is not close enough, add it to the new list.
-			if (PotentialTargets[i].Unit->IsActorBeingDestroyed() && Sight->LoseSightRadius > FVector::Dist(GetActorLocation(), PotentialTargets[i].Unit->GetActorLocation()))
-				newTargetList.Add(PotentialTargets[i]);
-		}
-
-		PotentialTargets = newTargetList;
-	}
 }
 
