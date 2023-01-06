@@ -42,6 +42,14 @@ void AUnitCharacter::UpdateWalkSpeed(float speed)
 	GetCharacterMovement()->MaxWalkSpeed = speed;
 }
 
+void AUnitCharacter::TakeDamage(float damage)
+{
+	UnitStats.CurrentUnitHealth -= damage;
+
+	if (UnitStats.CurrentUnitHealth <= 0)
+		Destroy();
+}
+
 void AUnitCharacter::UpdateTarget()
 {
 	FTarget currentTarget;
@@ -81,7 +89,8 @@ void AUnitCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void AUnitCharacter::Act()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, Sight->GetDebugColor(), "Action Taken");
+	Target->TakeDamage(1);
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, Sight->GetDebugColor(), "Damage Dealt");
 }
 
 void AUnitCharacter::OnPerception(AActor* Actor, FAIStimulus Stimulus)
@@ -122,11 +131,8 @@ void AUnitCharacter::OnPerception(AActor* Actor, FAIStimulus Stimulus)
 		for (int i = 0; i < PotentialTargets.Num(); i++)
 		{
 			// If that target is not close enough, add it to the new list.
-			if (PotentialTargets[i].Unit != NULL && Sight->LoseSightRadius > FVector::Dist(GetActorLocation(), PotentialTargets[i].Unit->GetActorLocation()))
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 2.0f, Sight->GetDebugColor(), "Target Removed");
+			if (PotentialTargets[i].Unit->IsActorBeingDestroyed() && Sight->LoseSightRadius > FVector::Dist(GetActorLocation(), PotentialTargets[i].Unit->GetActorLocation()))
 				newTargetList.Add(PotentialTargets[i]);
-			}
 		}
 
 		PotentialTargets = newTargetList;

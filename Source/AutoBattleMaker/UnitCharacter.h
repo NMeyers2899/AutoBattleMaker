@@ -38,6 +38,12 @@ struct FUnitStats
 
 	UPROPERTY(EditAnywhere)
 	float ActionRange;
+
+	UPROPERTY(EditAnywhere)
+	float MaxUnitHealth;
+
+	UPROPERTY(EditAnywhere)
+	float CurrentUnitHealth;
 };
 
 UCLASS()
@@ -60,6 +66,8 @@ public:
 	/// <param name="speed"> The speed that the unit's walk speed will update to. </param>
 	UFUNCTION(BlueprintCallable)
 	virtual void UpdateWalkSpeed(float speed);
+
+	virtual void TakeDamage(float damage);
 
 	/// <summary>
 	/// Updates all target's priority and updates the target at the end.
