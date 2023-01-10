@@ -64,11 +64,19 @@ void AUnitCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	UpdateWalkSpeed(UnitStats.MovementSpeed);
-
 	// Sets up the range at which the unit will be able to percieve other units entering their sight range.
 	Sight->SightRadius = UnitStats.SightRange;
-	Sight->LoseSightRadius = UnitStats.SightRange + 500;
+	Sight->LoseSightRadius = UnitStats.SightRange * 1.25f;
+
+
+	if (Target && FVector::Dist(GetActorLocation(), GetTarget()->GetActorLocation()) < GetUnitStats().ActionRange)
+	{
+		UpdateWalkSpeed(0.0f);
+	}
+	else
+	{
+		UpdateWalkSpeed(UnitStats.MovementSpeed);
+	}
 
 	UpdateTarget();
 }

@@ -8,11 +8,13 @@
 
 EBTNodeResult::Type UBTTask_ChaseTarget::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	if (AUnitCharacter* unit = dynamic_cast<AUnitCharacter*>(OwnerComp.GetAIOwner()->GetPawn()))
-	{
-		if (!unit->GetTarget() || FVector::Dist(unit->GetActorLocation(), unit->GetTarget()->GetActorLocation()) < unit->GetUnitStats().ActionRange)
-			return EBTNodeResult::Failed;
+	AUnitCharacter* unit = dynamic_cast<AUnitCharacter*>(OwnerComp.GetAIOwner()->GetPawn());
 
+	if (!unit->GetTarget())
+		return EBTNodeResult::Failed;
+
+	if (unit->GetTarget() != unit && FVector::Dist(unit->GetActorLocation(), unit->GetTarget()->GetActorLocation()) > unit->GetUnitStats().ActionRange)
+	{
 		OwnerComp.GetAIOwner()->GetBlackboardComponent()->SetValueAsVector("TargetLocation", unit->GetTarget()->GetActorLocation());
 
 		return EBTNodeResult::Succeeded;
