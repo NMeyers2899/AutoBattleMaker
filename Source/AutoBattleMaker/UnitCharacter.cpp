@@ -26,15 +26,15 @@ AUnitCharacter::AUnitCharacter()
 
 	// Adds the unit's OnPerception function to the Perception Component's OnTargetPerceptionUpdated delegate.
 	PerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AUnitCharacter::OnPerception);
-
-	FTarget target;
-	PotentialTargets.Init(target, 0);
 }
 
 // Called when the game starts or when spawned
 void AUnitCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	FTarget target;
+	PotentialTargets.Init(target, 0);
 }
 
 void AUnitCharacter::UpdateWalkSpeed(float speed)
@@ -87,9 +87,15 @@ void AUnitCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+float AUnitCharacter::TakeDamage(float damageAmount)
+{
+	return damageAmount;
+}
+
 void AUnitCharacter::Act()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, Sight->GetDebugColor(), "Action Taken");
+	Target->Destroy();
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, Sight->GetDebugColor(), "Target Killed");
 }
 
 void AUnitCharacter::OnPerception(AActor* Actor, FAIStimulus Stimulus)
@@ -107,7 +113,6 @@ void AUnitCharacter::OnPerception(AActor* Actor, FAIStimulus Stimulus)
 	{
 		newTarget.Priority = 0;
 		PotentialTargets.Add(newTarget);
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, Sight->GetDebugColor(), "Target Added");
 		return;
 	}
 
@@ -121,7 +126,6 @@ void AUnitCharacter::OnPerception(AActor* Actor, FAIStimulus Stimulus)
 	// Set the priority on the target to zero, and then add it to the list.
 	newTarget.Priority = 0;
 	PotentialTargets.Add(newTarget);
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, Sight->GetDebugColor(), "Target Added");
 
 	if (Target)
 	{
@@ -130,7 +134,7 @@ void AUnitCharacter::OnPerception(AActor* Actor, FAIStimulus Stimulus)
 		for (int i = 0; i < PotentialTargets.Num(); i++)
 		{
 			// If that target is not close enough, add it to the new list.
-			if (PotentialTargets[i].Unit != NULL && Sight->LoseSightRadius > FVector::Dist(GetActorLocation(), PotentialTargets[i].Unit->GetActorLocation()))
+			if (PotentialTargets[i].Unit == nullptr || Sight->LoseSightRadius > FVector::Dist(GetActorLocation(), PotentialTargets[i].Unit->GetActorLocation()))
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 2.0f, Sight->GetDebugColor(), "Target Removed");
 				newTargetList.Add(PotentialTargets[i]);

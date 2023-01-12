@@ -79,6 +79,8 @@ public:
 
 	AUnitCharacter* GetTarget() { return Target; }
 
+	float TakeDamage(float damageAmount);
+
 	void Act();
 
 	UFUNCTION()
