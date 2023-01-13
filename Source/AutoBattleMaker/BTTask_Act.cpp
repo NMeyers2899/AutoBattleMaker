@@ -9,6 +9,8 @@ EBTNodeResult::Type UBTTask_Act::ExecuteTask(UBehaviorTreeComponent& OwnerComp, 
 {
 	AUnitCharacter* unit = dynamic_cast<AUnitCharacter*>(OwnerComp.GetAIOwner()->GetPawn());
 
+	unit->UpdateTarget();
+
 	if (!unit->GetTarget() || unit->GetTarget() == unit)
 		return EBTNodeResult::Failed;
 

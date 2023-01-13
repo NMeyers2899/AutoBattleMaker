@@ -34,7 +34,9 @@ void AUnitCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	FTarget target;
-	PotentialTargets.Init(target, 0);
+	target.Unit = this;
+	target.Priority = 0.0f;
+	PotentialTargets.Init(target, 1);
 }
 
 void AUnitCharacter::UpdateWalkSpeed(float speed)
@@ -44,13 +46,29 @@ void AUnitCharacter::UpdateWalkSpeed(float speed)
 
 void AUnitCharacter::UpdateTarget()
 {
+	// If a unit is too far from this one, remove it from the list.
+	TArray<FTarget> newTargetList;
+	for (int i = 0; i < PotentialTargets.Num(); i++)
+	{
+		// If that target is not close enough, add it to the new list.
+		if (PotentialTargets[i].Unit != nullptr || Sight->LoseSightRadius < FVector::Dist(GetActorLocation(), PotentialTargets[i].Unit->GetActorLocation()))
+		{
+			newTargetList.Add(PotentialTargets[i]);
+		}
+	}
+
+	PotentialTargets = newTargetList;
+
 	FTarget currentTarget;
 	currentTarget.Priority = 0;
 
 	// Increase priority on each potential target and set the target as the one with the highest priority.
 	for (int i = 0; i < PotentialTargets.Num(); i++)
 	{
-		PotentialTargets[i].Priority += 0.001;
+		if(PotentialTargets[i].Unit == this)
+			PotentialTargets[i].Priority += 0.001;
+		else
+			PotentialTargets[i].Priority += 0.01;
 
 		if (PotentialTargets[i].Priority > currentTarget.Priority)
 			currentTarget = PotentialTargets[i];
@@ -77,8 +95,6 @@ void AUnitCharacter::Tick(float DeltaTime)
 	{
 		UpdateWalkSpeed(UnitStats.MovementSpeed);
 	}
-
-	UpdateTarget();
 }
 
 // Called to bind functionality to input
@@ -94,6 +110,9 @@ float AUnitCharacter::TakeDamage(float damageAmount)
 
 void AUnitCharacter::Act()
 {
+	if (Target->IsPendingKill())
+		return;
+
 	Target->Destroy();
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, Sight->GetDebugColor(), "Target Killed");
 }
@@ -126,22 +145,5 @@ void AUnitCharacter::OnPerception(AActor* Actor, FAIStimulus Stimulus)
 	// Set the priority on the target to zero, and then add it to the list.
 	newTarget.Priority = 0;
 	PotentialTargets.Add(newTarget);
-
-	if (Target)
-	{
-		// If a unit is too far from this one, remove it from the list.
-		TArray<FTarget> newTargetList;
-		for (int i = 0; i < PotentialTargets.Num(); i++)
-		{
-			// If that target is not close enough, add it to the new list.
-			if (PotentialTargets[i].Unit == nullptr || Sight->LoseSightRadius > FVector::Dist(GetActorLocation(), PotentialTargets[i].Unit->GetActorLocation()))
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 2.0f, Sight->GetDebugColor(), "Target Removed");
-				newTargetList.Add(PotentialTargets[i]);
-			}
-		}
-
-		PotentialTargets = newTargetList;
-	}
 }
 
