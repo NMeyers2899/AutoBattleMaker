@@ -23,6 +23,8 @@ struct FTarget
 	/// </summary>
 	UPROPERTY(EditAnywhere)
 	float Priority;
+
+	bool operator==(FTarget lhs);
 };
 
 USTRUCT()
@@ -106,6 +108,9 @@ private:
 	/// </summary>
 	UPROPERTY(EditAnywhere)
 	TArray<FTarget> PotentialTargets;
+
+	UPROPERTY(EditAnywhere)
+	FString Affiliation;
 
 	// Perception Variables
 

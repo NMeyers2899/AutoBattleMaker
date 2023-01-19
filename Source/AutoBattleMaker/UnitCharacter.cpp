@@ -46,12 +46,11 @@ void AUnitCharacter::UpdateWalkSpeed(float speed)
 
 void AUnitCharacter::UpdateTarget()
 {
-	// If a unit is too far from this one, remove it from the list.
 	TArray<FTarget> newTargetList;
 	for (int i = 0; i < PotentialTargets.Num(); i++)
 	{
-		// If that target is not close enough, add it to the new list.
-		if (PotentialTargets[i].Unit != nullptr || Sight->LoseSightRadius < FVector::Dist(GetActorLocation(), PotentialTargets[i].Unit->GetActorLocation()))
+		// If that target is alive or close enough, add it to the new list.
+		if (PotentialTargets[i].Unit->Affiliation == Affiliation || Sight->LoseSightRadius > FVector::Dist(GetActorLocation(), PotentialTargets[i].Unit->GetActorLocation()))
 		{
 			newTargetList.Add(PotentialTargets[i]);
 		}
@@ -110,11 +109,11 @@ float AUnitCharacter::TakeDamage(float damageAmount)
 
 void AUnitCharacter::Act()
 {
-	if (Target->IsPendingKill())
+	if (Target->Affiliation == Affiliation)
 		return;
 
-	Target->Destroy();
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, Sight->GetDebugColor(), "Target Killed");
+	Target->Affiliation = Affiliation;
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, Sight->GetDebugColor(), "Target Assimilated To " + Affiliation);
 }
 
 void AUnitCharacter::OnPerception(AActor* Actor, FAIStimulus Stimulus)
@@ -124,7 +123,7 @@ void AUnitCharacter::OnPerception(AActor* Actor, FAIStimulus Stimulus)
 	newTarget.Unit = dynamic_cast<AUnitCharacter*>(Actor);
 	
 	// If that actor is not a unit character, return.
-	if (!newTarget.Unit)
+	if (!newTarget.Unit || newTarget.Unit->Affiliation == Affiliation)
 		return;
 
 	// If there are no elements in the array, simply set the target's priority to zero and add it to the list.
@@ -147,3 +146,10 @@ void AUnitCharacter::OnPerception(AActor* Actor, FAIStimulus Stimulus)
 	PotentialTargets.Add(newTarget);
 }
 
+bool FTarget::operator==(FTarget lhs)
+{
+	FTarget temp;
+	temp.Unit = Unit;
+
+	return temp.Unit == lhs.Unit;
+}
