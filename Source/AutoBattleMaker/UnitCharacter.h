@@ -32,12 +32,21 @@ struct FUnitStats
 {
 	GENERATED_USTRUCT_BODY()
 
+	/// <summary>
+	/// How fast the unit will move.
+	/// </summary>
 	UPROPERTY(EditAnywhere)
 	float MovementSpeed;
 
+	/// <summary>
+	/// How far away the unit can see.
+	/// </summary>
 	UPROPERTY(EditAnywhere)
 	float SightRange;
 
+	/// <summary>
+	/// How close the unit has to be to its target to act.
+	/// </summary>
 	UPROPERTY(EditAnywhere)
 	float ActionRange;
 };
@@ -79,11 +88,15 @@ public:
 	/// </summary>
 	FUnitStats GetUnitStats() { return UnitStats; }
 
+	/// <summary>
+	/// Returns the unit's target.
+	/// </summary>
 	AUnitCharacter* GetTarget() { return Target; }
 
-	float TakeDamage(float damageAmount);
-
-	void Act();
+	/// <summary>
+	/// Allow this unit to do an action.
+	/// </summary>
+	virtual void Act();
 
 	UFUNCTION()
 	virtual void OnPerception(AActor* Actor, FAIStimulus Stimulus);

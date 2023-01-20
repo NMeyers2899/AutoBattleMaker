@@ -33,6 +33,7 @@ void AUnitCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// Create an initial target using this unit.
 	FTarget target;
 	target.Unit = this;
 	target.Priority = 0.0f;
@@ -46,24 +47,28 @@ void AUnitCharacter::UpdateWalkSpeed(float speed)
 
 void AUnitCharacter::UpdateTarget()
 {
+	// Create a new list for targets.
 	TArray<FTarget> newTargetList;
 	for (int i = 0; i < PotentialTargets.Num(); i++)
 	{
-		// If that target is alive or close enough, add it to the new list.
-		if (PotentialTargets[i].Unit->Affiliation == Affiliation || Sight->LoseSightRadius > FVector::Dist(GetActorLocation(), PotentialTargets[i].Unit->GetActorLocation()))
+		// If that target has a different affiliation or is still in sight range, add it to the new list.
+		if (PotentialTargets[i].Unit->Affiliation != Affiliation || Sight->LoseSightRadius > FVector::Dist(GetActorLocation(), PotentialTargets[i].Unit->GetActorLocation()))
 		{
 			newTargetList.Add(PotentialTargets[i]);
 		}
 	}
 
+	// Set the Potential Targets list to the new list.
 	PotentialTargets = newTargetList;
 
+	// Create a temporary target.
 	FTarget currentTarget;
 	currentTarget.Priority = 0;
 
 	// Increase priority on each potential target and set the target as the one with the highest priority.
 	for (int i = 0; i < PotentialTargets.Num(); i++)
 	{
+		// If this unit is its own target, increase its priority minimally. Otherwise, increase it normally.
 		if(PotentialTargets[i].Unit == this)
 			PotentialTargets[i].Priority += 0.001;
 		else
@@ -86,14 +91,11 @@ void AUnitCharacter::Tick(float DeltaTime)
 	Sight->LoseSightRadius = UnitStats.SightRange * 1.25f;
 
 
+	// If this unit is in acting range of its target, tell it to stop moving.
 	if (Target && FVector::Dist(GetActorLocation(), GetTarget()->GetActorLocation()) < GetUnitStats().ActionRange)
-	{
 		UpdateWalkSpeed(0.0f);
-	}
 	else
-	{
 		UpdateWalkSpeed(UnitStats.MovementSpeed);
-	}
 }
 
 // Called to bind functionality to input
@@ -102,16 +104,13 @@ void AUnitCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-float AUnitCharacter::TakeDamage(float damageAmount)
-{
-	return damageAmount;
-}
-
 void AUnitCharacter::Act()
 {
+	// If the units have the same affiliation, don't continue.
 	if (Target->Affiliation == Affiliation)
 		return;
 
+	// Set the target's affiliation to this one's.
 	Target->Affiliation = Affiliation;
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, Sight->GetDebugColor(), "Target Assimilated To " + Affiliation);
 }
